@@ -53,10 +53,8 @@ class GroupMeBot extends Adapter
     @timer = setInterval =>
       @fetch_messages (messages) =>
         messages = messages.sort (a, b) ->
-          if a.created_at < b.created_at
-            -1
-          if a.created_at > b.created_at
-            1
+          -1 if a.created_at < b.created_at
+          1 if a.created_at > b.created_at
           0
 
         # this is a hack, but basically, just assume we get messages in linear time
