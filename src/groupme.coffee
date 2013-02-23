@@ -1,9 +1,7 @@
 # resurrected/hacked from https://github.com/github/hubot/blob/f5c2bedcaeb70b7276efb7b2dbe27779cf0a3058/src/hubot/groupme.coffee
 
-{Adapter,Robot,TextMessage,EnterMessage,LeaveMessage} = require 'hubot'
-HTTP  = require 'http'
+{Adapter,Robot,TextMessage} = require 'hubot'
 HTTPS = require 'https'
-URL   = require 'url'
 UUID  = require 'node-uuid'
 
 class GroupMeBot extends Adapter
