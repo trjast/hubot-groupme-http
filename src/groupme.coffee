@@ -65,7 +65,7 @@ class GroupMeBot extends Adapter
 
           @newest_time = msg.created_at
 
-          if msg.text #and (msg.created_at * 1000) > new Date().getTime() - 5*1000 # I don't know what this did...
+          if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000
             console.log "#{msg.name}: #{msg.text}"
             @receive new TextMessage msg.name, msg.text
     , 2000
