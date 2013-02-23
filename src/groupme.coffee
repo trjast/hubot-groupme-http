@@ -66,7 +66,7 @@ class GroupMeBot extends Adapter
           @newest_time = msg.created_at
 
           if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000
-            console.log "#{msg.name}: #{msg.text}"
+            console.log "[RECEIVED] #{msg.name}: #{msg.text}"
             @receive new TextMessage msg.name, msg.text
     , 2000
 
@@ -79,8 +79,13 @@ class GroupMeBot extends Adapter
     clearInterval(@timer)
 
   send_message: (msg) ->
-    json = JSON.stringify(message: msg)
-    json.source_guid = UUID.v1()
+    messageStruct =
+      message:
+        text: msg.text
+        source_guid: UUID.v1()
+
+    json = JSON.stringify(messageStruct)
+    console.log "[SENDING GROUPME] ", json
 
     options =
       agent: false
@@ -103,7 +108,7 @@ class GroupMeBot extends Adapter
       data = ''
       response.on 'data', (chunk)-> data += chunk
       response.on 'end', ->
-        console.log(data)
+        console.log "[GROUPME RESPONSE] ", data
     request.end(json)
 
   fetch_messages: (cb) =>
