@@ -69,7 +69,8 @@ class GroupMeBot extends Adapter
 
           @newest_time = msg.created_at
 
-          if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000
+          # note that the name assigned to your robot in GroupMe must exactly match the name passed to Hubot
+          if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000 and msg.name != @robot.name
             console.log "[RECEIVED] #{msg.name}: #{msg.text}"
             @receive new TextMessage msg.name, msg.text
     , 2000
