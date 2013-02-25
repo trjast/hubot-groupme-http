@@ -19,7 +19,12 @@ class GroupMeBot extends Adapter
       #    @send_message picture_url: url
       #else
       #  @send_message text:str
-      @send_message text:str
+      if str.length > 450
+        substrings = str.match /.{1,430}/g
+        for text, index in substrings
+          @send_message "(" + index + "/" + substrings.length + ") " + text
+      else
+        @send_message str
 
   # Public: Raw method for building a reply and sending it back to the chat
   # source. Extend this.
@@ -77,10 +82,10 @@ class GroupMeBot extends Adapter
   close: ->
     clearInterval(@timer)
 
-  send_message: (msg) ->
+  send_message: (text) ->
     messageStruct =
       message:
-        text: msg.text
+        text: text
         source_guid: @generate_guid()
 
     json = JSON.stringify(messageStruct)
