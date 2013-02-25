@@ -44,8 +44,11 @@ class GroupMeBot extends Adapter
   #
   # Returns nothing.
   topic: (envelope, strings...) ->
-    @send(envelope, strings)
-    # ^^ I guess we'll just do that for now
+    strings.forEach (str) =>
+      if str.length > 440
+        str = str.substring(0,440)
+      str = "/topic " + str
+      send_message(str)
 
   # Public: Raw method for invoking the bot to run. Extend this.
   #
