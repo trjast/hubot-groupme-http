@@ -28,4 +28,4 @@ See [Finding Your Access Token](https://github.com/cdzombak/groupme-tools/blob/m
 ## TODO
 
 * multi-group support
-* eventually: upload_image, per [this script](https://github.com/github/hubot/blob/f5c2bedcaeb70b7276efb7b2dbe27779cf0a3058/src/hubot/groupme.coffee#L33)
+* image upload support, per [this script](https://github.com/github/hubot/blob/f5c2bedcaeb70b7276efb7b2dbe27779cf0a3058/src/hubot/groupme.coffee#L33)
