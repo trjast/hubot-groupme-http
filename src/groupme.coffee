@@ -144,15 +144,10 @@ class GroupMeBot extends Adapter
     request.end()
 
   generate_guid: ->
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (curDigit) ->
-        randNum = Math.floor(Math.random() * 16)
-        replacementDigit = 0
-        if curDigit is "x"
-            replacementDigit = randNum
-        else
-            replacementDigit = randNum & 3 | 8
-        return replacementDigit.toString(16)
-    )
+    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace /[xy]/g, (curDigit) ->
+      randNum = Math.floor(Math.random() * 16)
+      randNum.toString(16) if curDigit is "x"
+      (randNum & 3 | 8).toString(16)
 
 exports.use = (robot) ->
   new GroupMeBot robot
