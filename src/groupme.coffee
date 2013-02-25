@@ -48,7 +48,7 @@ class GroupMeBot extends Adapter
       if str.length > 440
         str = str.substring(0,440)
       str = "/topic " + str
-      send_message(str)
+      @send_message user.room_id, str
 
   # Public: Raw method for invoking the bot to run. Extend this.
   #
