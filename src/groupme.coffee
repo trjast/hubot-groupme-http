@@ -83,6 +83,11 @@ class GroupMeBot extends Adapter
   close: ->
     clearInterval(@timer)
 
+  # Private: send a message to the GroupMe room
+  #
+  # text - Text message to be sent to the room.
+  #
+  # Returns nothing.
   send_message: (text) ->
     messageStruct =
       message:
@@ -116,6 +121,12 @@ class GroupMeBot extends Adapter
         console.log "[GROUPME RESPONSE] ", data
     request.end(json)
 
+  # Private: fetch messages from the GroupMe room
+  # Calls your callback with the latest 20 messages on completion.
+  #
+  # cb - Callback which takes an array of GroupMe message objects
+  #
+  # Returns nothing.
   fetch_messages: (cb) =>
     options =
       agent: false
@@ -143,6 +154,9 @@ class GroupMeBot extends Adapter
           cb(json.response.messages)
     request.end()
 
+  # Private: Generate a GroupMe GUID for a message
+  #
+  # Returns a new GUID string.
   generate_guid: ->
     "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace /[xy]/g, (curDigit) ->
       randNum = Math.floor(Math.random() * 16)
