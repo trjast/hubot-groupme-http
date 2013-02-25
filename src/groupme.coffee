@@ -2,7 +2,6 @@
 
 {Adapter,Robot,TextMessage} = require 'hubot'
 HTTPS = require 'https'
-UUID  = require 'node-uuid'
 
 class GroupMeBot extends Adapter
 
@@ -82,7 +81,7 @@ class GroupMeBot extends Adapter
     messageStruct =
       message:
         text: msg.text
-        source_guid: UUID.v1()
+        source_guid: @generate_guid()
 
     json = JSON.stringify(messageStruct)
     console.log "[SENDING GROUPME] ", json
@@ -137,6 +136,17 @@ class GroupMeBot extends Adapter
           json = JSON.parse(data)
           cb(json.response.messages)
     request.end()
+
+  generate_guid: ->
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (curDigit) ->
+        randNum = Math.floor(Math.random() * 16)
+        replacementDigit = 0
+        if curDigit is "x"
+            replacementDigit = randNum
+        else
+            replacementDigit = randNum & 3 | 8
+        return replacementDigit.toString(16)
+    )
 
 exports.use = (robot) ->
   new GroupMeBot robot

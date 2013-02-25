@@ -17,7 +17,7 @@
   "main": "./src/groupme.coffee",
   "engine": "node > 0.6.0 < 0.8.0",
   "dependencies": {
-    "node-uuid": "1.4.0"
+
   },
   "devDependencies": {
     "coffee-script": "1.1.3"
