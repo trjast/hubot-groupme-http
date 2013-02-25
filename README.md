@@ -4,8 +4,7 @@ Connect Hubot to a GroupMe group, using GroupMe's (undocumented, not-really-publ
 
 ## Limitations
 
-* Right now, this only supports being in one GroupMe group.
-* And it'll need to piggyback on someone else's GroupMe account, because you need a phone number to sign up for GroupMe.
+Right now, this only supports being in one GroupMe group. See [TODO](https://github.com/cdzombak/hubot-groupme-http#todo).
 
 ### Alternative
 
@@ -28,6 +27,5 @@ See [Finding Your Access Token](https://github.com/cdzombak/groupme-tools/blob/m
 
 ## TODO
 
-* fix/allow sending ಠ_ಠ chars from scripts
 * multi-group support
 * eventually: upload_image, per [this script](https://github.com/github/hubot/blob/f5c2bedcaeb70b7276efb7b2dbe27779cf0a3058/src/hubot/groupme.coffee#L33)
