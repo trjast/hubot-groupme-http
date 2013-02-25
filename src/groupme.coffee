@@ -22,7 +22,7 @@ class GroupMeBot extends Adapter
       if str.length > 450
         substrings = str.match /.{1,430}/g
         for text, index in substrings
-          @send_message "(" + index + "/" + substrings.length + ") " + text
+          @send_message user.room_id, "(#{index}/#{substrings.length}) #{text}"
       else
         @send_message str
 
@@ -47,7 +47,7 @@ class GroupMeBot extends Adapter
     strings.forEach (str) =>
       if str.length > 440
         str = str.substring(0,440)
-      str = "/topic " + str
+      str = "/topic #{str}"
       @send_message user.room_id, str
 
   # Public: Raw method for invoking the bot to run. Extend this.
