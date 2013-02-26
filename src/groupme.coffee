@@ -24,7 +24,7 @@ class GroupMeBot extends Adapter
         for text, index in substrings
           @send_message user.room_id, "(#{index}/#{substrings.length}) #{text}"
       else
-        @send_message str
+        @send_message user.room_id, str
 
   # Public: Raw method for building a reply and sending it back to the chat
   # source. Extend this.
@@ -54,28 +54,36 @@ class GroupMeBot extends Adapter
   #
   # Returns nothing.
   run: ->
-    @room_id = process.env.HUBOT_GROUPME_ROOM
-    @token   = process.env.HUBOT_GROUPME_TOKEN
+    @room_ids = process.env.HUBOT_GROUPME_ROOM_IDS.split(',')
+    @token    = process.env.HUBOT_GROUPME_TOKEN
+
+    @newest_timestamp = { }
+    for room in @room_ids
+      @newest_timestamp[room] = 0
 
     @timer = setInterval =>
-      @fetch_messages (messages) =>
-        messages = messages.sort (a, b) ->
-          -1 if a.created_at < b.created_at
-          1 if a.created_at > b.created_at
-          0
+      @room_ids.forEach (room) =>
+        @fetch_messages room, (messages) =>
+          messages = messages.sort (a, b) ->
+            -1 if a.created_at < b.created_at
+            1 if a.created_at > b.created_at
+            0
 
-        # this is a hack, but basically, just assume we get messages in linear time
-        # I don't want to RE GroupMe's web push API right now.
-        for msg in messages
-          if msg.created_at <= @newest_time
-            continue
+          # this is a hack, but basically, just assume we get messages in linear time
+          # I don't want to RE GroupMe's web push API right now.
+          for msg in messages
+            if msg.created_at <= @newest_timestamp[room]
+              continue
 
-          @newest_time = msg.created_at
+            @newest_timestamp[room] = msg.created_at
 
-          # note that the name assigned to your robot in GroupMe must exactly match the name passed to Hubot
-          if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000 and msg.name != @robot.name
-            console.log "[RECEIVED] #{msg.name}: #{msg.text}"
-            @receive new TextMessage msg.name, msg.text
+            # note that the name assigned to your robot in GroupMe must exactly match the name passed to Hubot
+            if msg.text and (msg.created_at * 1000) > new Date().getTime() - 6*1000 and msg.name != @robot.name
+              console.log "[RECEIVED in #{room}] #{msg.name}: #{msg.text}"
+              userInfo =
+                name: msg.name
+                room_id: room
+              @receive new TextMessage userInfo, msg.text
     , 2000
 
     @emit 'connected'
@@ -88,10 +96,11 @@ class GroupMeBot extends Adapter
 
   # Private: send a message to the GroupMe room
   #
+  # room_id - ID of room to send to
   # text - Text message to be sent to the room.
   #
   # Returns nothing.
-  send_message: (text) ->
+  send_message: (room_id, text) ->
     messageStruct =
       message:
         text: text
@@ -105,7 +114,7 @@ class GroupMeBot extends Adapter
       host: 'v2.groupme.com'
       port: 443
       method: 'POST'
-      path: "/groups/#{@room_id}/messages"
+      path: "/groups/#{room_id}/messages"
       headers:
         'Content-Length': json.length
         'Content-Type': 'application/json'
@@ -113,7 +122,7 @@ class GroupMeBot extends Adapter
         'Accept-Charset': 'ISO-8859-1,utf-8',
         'Accept-Language': 'en-US',
         'Origin': 'https://web.groupme.com',
-        'Referer': "https://web.groupme.com/groups/#{@room_id}",
+        'Referer': "https://web.groupme.com/groups/#{room_id}",
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.45 Safari/537.22',
         'X-Access-Token': @token
 
@@ -127,26 +136,26 @@ class GroupMeBot extends Adapter
   # Private: fetch messages from the GroupMe room
   # Calls your callback with the latest 20 messages on completion.
   #
+  # room_id - ID of room to fetch messages for
   # cb - Callback which takes an array of GroupMe message objects
   #
   # Returns nothing.
-  fetch_messages: (cb) =>
+  fetch_messages: (room_id, cb) =>
     options =
       agent: false
       host: 'v2.groupme.com'
       port: 443
       method: 'GET'
-      path: "/groups/#{@room_id}/messages"
-      headers: {
+      path: "/groups/#{room_id}/messages"
+      headers:
         'Accept': 'application/json, text/javascript',
         'Accept-Charset': 'ISO-8859-1,utf-8',
         'Accept-Language': 'en-US',
         'Content-Type': 'application/json',
         'Origin': 'https://web.groupme.com',
-        'Referer': "https://web.groupme.com/groups/#{@room_id}",
+        'Referer': "https://web.groupme.com/groups/#{room_id}",
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.45 Safari/537.22',
         'X-Access-Token': @token
-      }
 
     request = HTTPS.request options, (response) =>
       data = ''

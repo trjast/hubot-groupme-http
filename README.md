@@ -20,8 +20,8 @@ And `npm install`.
 
 Two environment variables must be set:
 
-* `HUBOT_GROUPME_ROOM`
-* `HUBOT_GROUPME_TOKEN`
+* `HUBOT_GROUPME_ROOM_IDS`: a string of GroupMe chat room IDs, separated by commas. ex: `"111222,333444"`
+* `HUBOT_GROUPME_TOKEN`: a GroupMe access token. ex: `"mFKYryFoTjdPkKGd9shvjwnMunSSOLvhs44498Fc"`
 
 See [Finding Your Access Token](https://github.com/cdzombak/groupme-tools/blob/master/README.md#finding-your-access-token) and [Finding Your Group ID](https://github.com/cdzombak/groupme-tools/blob/master/README.md#finding-your-group-id).
 
