@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/cdzombak/hubot-groupme-http/issues"
   },
-  "main": "./src/groupme.coffee",
+  "main": "./src/groupme.js",
   "engine": "node > 0.6.0 < 0.8.0",
   "dependencies": {
 
