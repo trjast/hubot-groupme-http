@@ -148,7 +148,7 @@ GroupMeBot = (function(_super) {
 			}
 			else {
 				console.log("[JERRY] Bot Does Not Exist");
-				request.post(botEndpoint, { json: { "bot" : { "name" : "Jerry" , "group_id" : userRoomIdentifier } } },
+				request.post(botEndpoint, { json: { "bot" : { "name" : "Jerry" , "group_id" : userRoomIdentifier, "avatar_url": "http://www.sociallytied.in/images/jerry-square.png" } } },
 					function (error, response, body) {
 						console.log("[JERRY] Creating Bot...");
 						botAccessToken = body.response.bot.bot_id;
